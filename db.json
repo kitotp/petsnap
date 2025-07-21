@@ -1,0 +1,16 @@
+{
+  "posts": [
+    {
+      "name": "First post",
+      "description": "first post description",
+      "image": "cat.png",
+      "id": "4024"
+    },
+    {
+      "id": "ae03",
+      "name": "first",
+      "description": "dfgdfg",
+      "image": "cat2.jpg"
+    }
+  ]
+}
