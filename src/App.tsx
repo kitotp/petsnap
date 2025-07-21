@@ -4,6 +4,7 @@ import LoginPage from "./features/Login/LoginPage"
 import AppLayout from "./ui/AppLayout"
 import PostsPage from "./features/Posts/PostsPage"
 import AdminPage from "./features/Admin/AdminPage"
+import RequireNoAuth from "./ui/RequireNoAuth"
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <LoginPage />
+        element: (
+          <RequireNoAuth>
+            <LoginPage />
+          </RequireNoAuth>)
       },
       {
         path: '/posts',

@@ -9,10 +9,18 @@ type UserState = {
     error?: string
 }
 
-const initialState: UserState = {
-    username: '',
-    status: 'idle'
+function loadUser(): UserState {
+    const saved = localStorage.getItem('user')
+    if (!saved) return { username: '', status: 'idle' }
+    try {
+        return JSON.parse(saved)
+    } catch {
+        console.warn('failed to parse user from localStorage')
+        return { username: '', status: 'idle' }
+    }
 }
+
+const initialState: UserState = loadUser()
 
 type fetchUserByEmailProps = {
     email: string,

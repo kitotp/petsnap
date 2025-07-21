@@ -7,6 +7,11 @@ const store = configureStore({
     }
 })
 
+store.subscribe(() => {
+    const state = store.getState()
+    localStorage.setItem('user', JSON.stringify(state.user))
+})
+
 export default store
 
 export type RootState = ReturnType<typeof store.getState>;
