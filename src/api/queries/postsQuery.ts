@@ -1,20 +1,28 @@
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Post } from "../../features/Posts/PostsPage";
+import supabase from "../../supabaseClient";
 
-export async function fetchPosts() {
-    const res = await fetch('http://localhost:3001/posts')
-    if (!res.ok) throw new Error('Error while fetching posts')
-    return res.json() as Promise<Post[]>
+// !!!типипизировать в будущем!!!
+
+export async function fetchPosts(): Promise<Post[]> {
+    const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+    if (error) throw new Error('Error while fetching posts')
+    return data
 }
 
 export async function createPost(newPost: Post) {
-    const res = await fetch('http://localhost:3001/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPost)
-    })
-    if (!res.ok) throw new Error('Error while creating new post.')
-    return res.json() as Promise<Post>
+
+    
+
+    const { data, error } = await supabase
+        .from('posts')
+        .insert([{ name: newPost.name, description: newPost.description, image: newPost.image }])
+        .single()
+
+    if (error) throw new Error('Error while creating post')
+    return data
 }
 
 export function useCreatePostMutation() {
