@@ -2,7 +2,7 @@ import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query
 import type { Post } from "../../features/Posts/PostsPage";
 import supabase from "../../supabaseClient";
 
-// !!!типипизировать в будущем!!!
+// !!!типипизировать в будущем!!!!
 
 export async function fetchPosts(): Promise<Post[]> {
     const { data, error } = await supabase
@@ -14,7 +14,7 @@ export async function fetchPosts(): Promise<Post[]> {
 
 export async function createPost(newPost: Post) {
 
-    
+
 
     const { data, error } = await supabase
         .from('posts')
