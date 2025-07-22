@@ -10,6 +10,7 @@ const PostElement = ({ post }: PostElementProps) => {
             <h1 className="font-semibold text-[20px]">{post.name}</h1>
             <p>{post.description}</p>
             <img src={post.image} className="w-[50px] h-[50px]"></img>
+            <p>Created by: {post.created_by}</p>
         </div>
     )
 }

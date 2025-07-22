@@ -6,6 +6,7 @@ export type Post = {
     name: string,
     description: string,
     image: string,
+    created_by: string,
 }
 
 const PostsPage = () => {
