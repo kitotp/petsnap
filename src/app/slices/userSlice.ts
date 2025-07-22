@@ -6,24 +6,26 @@ import supabase from "../../supabaseClient";
 type UserState = {
     username: string,
     id: string,
+    role: string,
     status: 'idle' | 'loading' | 'failed',
     error?: string
 }
 
 function loadUser(): UserState {
     const saved = localStorage.getItem('user')
-    if (!saved) return { username: '', status: 'idle', id: '0' }
+    if (!saved) return { username: '', status: 'idle', id: '0', role: '' }
     try {
         return JSON.parse(saved)
     } catch {
         console.warn('failed to parse user from localStorage')
-        return { username: '', status: 'idle', id: '0' }
+        return { username: '', status: 'idle', id: '0', role: '' }
     }
 }
 
 type User = {
     id: string,
-    email: string
+    email: string,
+    role: string
 }
 
 const initialState: UserState = loadUser()
@@ -43,13 +45,20 @@ export const fetchUserByEmail = createAsyncThunk<User, fetchUserByEmailProps>(
         })
         if (error) throw new Error('Error while signing in')
 
-        if (!data.session || !data.session.user.email) {
-            throw new Error('No user mail')
-        }
+        const user_id = data.session!.user.id
+
+        const { data: profile, error: loginError } = await supabase
+            .from('user_profiles')
+            .select('username, role')
+            .eq('id', user_id)
+            .single()
+
+        if (loginError) throw loginError
 
         return {
-            id: data.session.user.id,
-            email: data.session.user.email
+            id: user_id,
+            email: profile?.username,
+            role: profile?.role
         }
     }
 )
@@ -64,6 +73,8 @@ const userSlice = createSlice({
         logout(state) {
             state.username = '',
                 state.status = 'idle'
+            state.id = ''
+            state.role = ''
         }
     },
     extraReducers: (builder) => {
@@ -74,11 +85,11 @@ const userSlice = createSlice({
             .addCase(fetchUserByEmail.fulfilled, (state, action: PayloadAction<User>) => {
                 state.status = 'idle',
                     state.username = action.payload.email,
-                    state.id = action.payload.id
+                    state.id = action.payload.id,
+                    state.role = action.payload.role
             })
-            .addCase(fetchUserByEmail.rejected, (state, action) => {
-                state.status = 'failed',
-                    state.error = action.payload ?? action.error.message
+            .addCase(fetchUserByEmail.rejected, (state) => {
+                state.status = 'failed'
             })
     },
 })

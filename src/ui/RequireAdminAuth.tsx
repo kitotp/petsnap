@@ -7,7 +7,7 @@ type RequireAuthProps = PropsWithChildren<{}>
 const RequireAuth = ({ children }: RequireAuthProps) => {
     const user = useAppSelector(store => store.user)
 
-    if (!user.username) {
+    if (!user.username || user.role === 'user') {
         return <Navigate to='/' replace />
     }
 

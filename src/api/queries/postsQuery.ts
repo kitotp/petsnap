@@ -60,7 +60,7 @@ async function uploadImage(file: File): Promise<string> {
     return publicData.publicUrl
 }
 
-export async function createPost(newPost: Omit<Post, 'image'> & { imageFile: File }) {
+export async function createPost(newPost: Omit<Post, 'image' | 'id'> & { imageFile: File }) {
 
     const imageUrl = await uploadImage(newPost.imageFile)
 
