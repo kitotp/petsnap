@@ -9,7 +9,7 @@ type NewPostProps = {
 
 const NewPost = ({ onClose }: NewPostProps) => {
 
-    const username = useAppSelector(store => store.user.username)
+    const user = useAppSelector(store => store.user)
     const createMutation = useCreatePostMutation()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -21,7 +21,7 @@ const NewPost = ({ onClose }: NewPostProps) => {
 
     function createPost() {
 
-        if (!username) {
+        if (!user.username) {
             navigator('/login')
             return
         }
@@ -35,7 +35,7 @@ const NewPost = ({ onClose }: NewPostProps) => {
             name: name,
             description: description,
             imageFile: file,
-            created_by: username,
+            created_by: user.id,
         }
 
 

@@ -17,6 +17,7 @@ const Header = () => {
             <Link to='/posts'>Posts</Link>
             {!user.username ? <Link to='/login'>Login</Link> : <button onClick={() => dispatch(logout())} className='cursor-pointer'>Logout</button>}
             {/* <Link to='/admin'>Admin</Link> */}
+            {user.username && <Link to={`/profile/${user.id}`}>Profile</Link>}
         </div>
     )
 }

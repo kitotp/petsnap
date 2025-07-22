@@ -3,8 +3,13 @@ import HomePage from "./features/Home/HomePage"
 import LoginPage from "./features/Login/LoginPage"
 import AppLayout from "./ui/AppLayout"
 import PostsPage from "./features/Posts/PostsPage"
-import AdminPage from "./features/Admin/AdminPage"
 import RequireNoAuth from "./ui/RequireNoAuth"
+import ProfilePage from "./features/Profile/ProfilePage"
+import RequireAuth from "./ui/RequireAuth"
+import { lazy } from "react"
+
+
+const AdminPage = lazy(() => import('./features/Admin/AdminPage'))
 
 const router = createBrowserRouter([
   {
@@ -28,6 +33,13 @@ const router = createBrowserRouter([
       {
         path: '/admin',
         element: <AdminPage />
+      },
+      {
+        path: '/profile/:id',
+        element: (
+          <RequireAuth>
+            <ProfilePage />
+          </RequireAuth>)
       }
     ]
   },

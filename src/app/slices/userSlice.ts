@@ -5,19 +5,25 @@ import supabase from "../../supabaseClient";
 
 type UserState = {
     username: string,
+    id: string,
     status: 'idle' | 'loading' | 'failed',
     error?: string
 }
 
 function loadUser(): UserState {
     const saved = localStorage.getItem('user')
-    if (!saved) return { username: '', status: 'idle' }
+    if (!saved) return { username: '', status: 'idle', id: '0' }
     try {
         return JSON.parse(saved)
     } catch {
         console.warn('failed to parse user from localStorage')
-        return { username: '', status: 'idle' }
+        return { username: '', status: 'idle', id: '0' }
     }
+}
+
+type User = {
+    id: string,
+    email: string
 }
 
 const initialState: UserState = loadUser()
@@ -27,7 +33,7 @@ type fetchUserByEmailProps = {
     password: string
 }
 
-export const fetchUserByEmail = createAsyncThunk<string, fetchUserByEmailProps>(
+export const fetchUserByEmail = createAsyncThunk<User, fetchUserByEmailProps>(
     'user/fetchByEmail',
     async ({ email, password }) => {
 
@@ -41,7 +47,10 @@ export const fetchUserByEmail = createAsyncThunk<string, fetchUserByEmailProps>(
             throw new Error('No user mail')
         }
 
-        return data.session.user.email
+        return {
+            id: data.session.user.id,
+            email: data.session.user.email
+        }
     }
 )
 
@@ -62,9 +71,10 @@ const userSlice = createSlice({
             .addCase(fetchUserByEmail.pending, (state) => {
                 state.status = 'loading'
             })
-            .addCase(fetchUserByEmail.fulfilled, (state, action: PayloadAction<string>) => {
+            .addCase(fetchUserByEmail.fulfilled, (state, action: PayloadAction<User>) => {
                 state.status = 'idle',
-                    state.username = action.payload
+                    state.username = action.payload.email,
+                    state.id = action.payload.id
             })
             .addCase(fetchUserByEmail.rejected, (state, action) => {
                 state.status = 'failed',

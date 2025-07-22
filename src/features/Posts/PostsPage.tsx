@@ -3,6 +3,7 @@ import { postsQuery } from "../../api/queries/postsQuery"
 import PostElement from "./PostElement"
 
 export type Post = {
+    id: number,
     name: string,
     description: string,
     image: string,
@@ -17,7 +18,7 @@ const PostsPage = () => {
     if (error) throw console.error(error)
 
     return (
-        <div className="flex flex-row p-5 gap-2">
+        <div className="flex flex-wrap p-5 gap-2">
             {data.map((post: Post) => <PostElement post={post} />)}
         </div>
     )
