@@ -1,6 +1,5 @@
 import { useDeletePostMutation } from '../../api/queries/postsQuery'
-import type { Post } from '../Posts/PostsPage'
-
+import type { Post } from '../../types'
 
 type PostElementProps = {
     post: Post

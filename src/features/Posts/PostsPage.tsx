@@ -1,14 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import { postsQuery } from "../../api/queries/postsQuery"
 import PostElement from "./PostElement"
+import type { Post } from "../../types"
 
-export type Post = {
-    id: number,
-    name: string,
-    description: string,
-    image: string,
-    created_by: string,
-}
+
 
 const PostsPage = () => {
 

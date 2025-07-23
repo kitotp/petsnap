@@ -1,5 +1,5 @@
 import { useDeleteUserMutation } from '../../api/queries/usersQuery'
-import type { User } from '../../app/slices/userSlice'
+import type { User } from '../../types'
 
 type UserElementProps = {
     user: User

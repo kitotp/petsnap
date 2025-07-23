@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Post } from "../../features/Posts/PostsPage";
+import type { Post } from "../../types";
 import supabase from "../../supabaseClient";
 import { v4 as uuidv4 } from 'uuid'
 

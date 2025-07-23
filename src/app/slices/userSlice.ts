@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import supabase from "../../supabaseClient";
-
+import type { User } from "../../types";
 
 
 type UserState = {
@@ -20,12 +20,6 @@ function loadUser(): UserState {
         console.warn('failed to parse user from localStorage')
         return { username: '', status: 'idle', id: '0', role: '' }
     }
-}
-
-export type User = {
-    id: string,
-    email: string,
-    role: string
 }
 
 const initialState: UserState = loadUser()
