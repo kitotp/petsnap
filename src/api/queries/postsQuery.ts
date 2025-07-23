@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Post } from "../../features/Posts/PostsPage";
+import type { Post } from "../../types";
 import supabase from "../../supabaseClient";
 import { v4 as uuidv4 } from 'uuid'
 
@@ -60,7 +60,7 @@ async function uploadImage(file: File): Promise<string> {
     return publicData.publicUrl
 }
 
-export async function createPost(newPost: Omit<Post, 'image'> & { imageFile: File }) {
+export async function createPost(newPost: Omit<Post, 'image' | 'id'> & { imageFile: File }) {
 
     const imageUrl = await uploadImage(newPost.imageFile)
 

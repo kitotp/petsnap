@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react"
-import type { Post } from "./PostsPage"
+import type { Post } from "../../types"
 
 // interface PostElementProps {
 //     post: Post

@@ -5,7 +5,8 @@ import AppLayout from "./ui/AppLayout"
 import PostsPage from "./features/Posts/PostsPage"
 import RequireNoAuth from "./ui/RequireNoAuth"
 import ProfilePage from "./features/Profile/ProfilePage"
-import RequireAuth from "./ui/RequireAuth"
+import RequireUserAuth from "./ui/RequireUserAuth"
+import RequireAdminAuth from "./ui/RequireAdminAuth"
 import { lazy } from "react"
 
 
@@ -32,14 +33,17 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin',
-        element: <AdminPage />
+        element: (
+          <RequireAdminAuth>
+            <AdminPage />
+          </RequireAdminAuth>)
       },
       {
         path: '/profile/:id',
         element: (
-          <RequireAuth>
+          <RequireUserAuth>
             <ProfilePage />
-          </RequireAuth>)
+          </RequireUserAuth>)
       }
     ]
   },
