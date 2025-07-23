@@ -22,7 +22,7 @@ function loadUser(): UserState {
     }
 }
 
-type User = {
+export type User = {
     id: string,
     email: string,
     role: string
@@ -49,7 +49,7 @@ export const fetchUserByEmail = createAsyncThunk<User, fetchUserByEmailProps>(
 
         const { data: profile, error: loginError } = await supabase
             .from('user_profiles')
-            .select('username, role')
+            .select('email, role')
             .eq('id', user_id)
             .single()
 
@@ -57,7 +57,7 @@ export const fetchUserByEmail = createAsyncThunk<User, fetchUserByEmailProps>(
 
         return {
             id: user_id,
-            email: profile?.username,
+            email: profile?.email,
             role: profile?.role
         }
     }
