@@ -1,23 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import supabase from "../../supabaseClient";
 import type { User } from "../../types";
 
 export async function fetchUsers(): Promise<User[]> {
-    const { data, error } = await supabase
-        .from('user_profiles')
-        .select('id, email, role')
+    
 
-    if (error) throw error
+    const res = await fetch('http://127.0.0.1:8000/users',{
+        method: 'GET',
+        headers: {'Accept': 'application/json'}
+    })
+
+    const data = await res.json() as User[]
     return data
 }
 
 async function removeUserById(userId: string) {
-    const { error } = await supabase
-        .from('user_profiles')
-        .delete()
-        .eq('id', userId)
-
-    if (error) throw error
+    const res = await fetch(`http://127.0.0.1:8000/users/${userId}`,{
+        method: 'DELETE'
+    })
+    if (!res.ok){
+        throw new Error('Error while deleting user')
+    }
 }
 
 

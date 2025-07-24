@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import supabase from "../../supabaseClient";
 import type { User } from "../../types";
 
 
@@ -32,28 +31,18 @@ type fetchUserByEmailProps = {
 export const fetchUserByEmail = createAsyncThunk<User, fetchUserByEmailProps>(
     'user/fetchByEmail',
     async ({ email, password }) => {
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
+        const res = await fetch('http://127.0.0.1:8000/users/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email: email,password: password})
         })
-        if (error) throw new Error('Error while signing in')
 
-        const user_id = data.session!.user.id
-
-        const { data: profile, error: loginError } = await supabase
-            .from('user_profiles')
-            .select('email, role')
-            .eq('id', user_id)
-            .single()
-
-        if (loginError) throw loginError
-
-        return {
-            id: user_id,
-            email: profile?.email,
-            role: profile?.role
+        if(!res.ok){
+            throw new Error('Can not fetch user data')
         }
+
+        return await res.json()
+
     }
 )
 

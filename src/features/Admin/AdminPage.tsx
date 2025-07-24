@@ -11,7 +11,7 @@ const AdminPage = () => {
 
     if (isLoading) return <div>IsLoading...</div>
     if (postsLoading) return <div>Posts are loading...</div>
-    console.log(posts)
+    console.log(users)
 
     return (
         <div className="flex flex-row items-center justify-center gap-10 py-10">
