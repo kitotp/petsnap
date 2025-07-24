@@ -3,27 +3,31 @@ import type { Post } from "../../types";
 import supabase from "../../supabaseClient";
 import { v4 as uuidv4 } from 'uuid'
 
-// !!!типипизировать в будущем!!!!
-
 
 export async function fetchPosts(): Promise<Post[]> {
-    const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-    if (error) throw new Error('Error while fetching posts')
+    
+    const res = await fetch('http://127.0.0.1:8000/posts', {
+        method: 'GET',
+        headers: {'Accept': 'application/json'}
+    })
+
+    if(!res.ok){
+        throw new Error('Cant fetch all posts')
+    }
+
+    const data = await res.json() as Post[]
     return data
 }
 
 export async function fetchPostsById(userId: string): Promise<Post[]> {
 
+    const res = await fetch(`http://127.0.0.1:8000/posts/by-user?userId=${userId}`)
 
-    const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('created_by', userId)
+    if(!res.ok){
+        throw new Error('Cant fetch all posts by user Id')
+    }
 
-    if (error) throw error
-
+    const data = await res.json() as Post[]
     return data
 }
 
@@ -60,17 +64,21 @@ async function uploadImage(file: File): Promise<string> {
     return publicData.publicUrl
 }
 
-export async function createPost(newPost: Omit<Post, 'image' | 'id'> & { imageFile: File }) {
+export async function createPost(newPost: Omit<Post, 'image' | 'id' | 'category'> & { imageFile: File }) {
 
     const imageUrl = await uploadImage(newPost.imageFile)
 
-    const { data, error } = await supabase
-        .from('posts')
-        .insert([{ name: newPost.name, description: newPost.description, image: imageUrl, created_by: newPost.created_by }])
-        .single()
+    const res = await fetch('http://127.0.0.1:8000/posts',{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name: newPost.name, description: newPost.description, image: imageUrl, created_by: newPost.created_by})
+    })
 
-    if (error) throw new Error('Error while creating post')
-    return data
+    if(!res.ok){
+        throw new Error('Couldnt create new post')
+    }
+
+    return res.json()
 }
 
 export function useDeletePostMutation() {

@@ -1,5 +1,6 @@
 import zipfile
 import torch
+import io
 from torch import nn
 from torchvision import transforms, datasets, models
 from PIL import Image
@@ -21,21 +22,18 @@ model.fc = nn.Linear(fc_infeatures, 2)
 
 checkpoint = torch.load("resnet18_finetuned.pth", map_location="cpu")
 model.load_state_dict(checkpoint)
+model.to(device).eval()
 
-img = Image.open("./dog.png").convert("RGB")
-inp = test_transforms(img).unsqueeze(0)
+idx2class = {0: "cat", 1: "dog"}  
 
-model.eval()
-
-classes = {
-    1: "dog",
-    2: "cat",
-}
-
-with torch.no_grad():
+def predict_img(image: bytes) -> dict:
+    img = Image.open(io.BytesIO(image)).convert('RGB')
+    inp = test_transforms(img).unsqueeze(0)
     output = model(inp)  # raw logits
     probs = torch.softmax(output, dim=1)
     max_val = torch.argmax(probs, dim=1).item()
-    confidence = probs[0, max_val].item()
+    return {
+        'class': idx2class[max_val],
+        'confidence': float(probs[0, max_val])
+    }
 
-print("Class", classes[max_val], "with confidence: ", confidence)

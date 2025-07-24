@@ -4,6 +4,7 @@ export type Post = {
     description: string,
     image: string,
     created_by: string,
+    category: string,
 }
 
 export type User = {

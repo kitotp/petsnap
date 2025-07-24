@@ -16,7 +16,7 @@ const ProfilePage = () => {
             {userPosts.length > 0 ?
                 <>
                     <h1>Your posts:</h1>
-                    <div className="flex flex-row items-center justify-center">
+                    <div className="flex flex-row flex-wrap items-center justify-start gap-3 px-2">
                         {userPosts?.map(post => <PostElement post={post}>
                             <button className="border border-black p-2 bg-amber-200" onClick={() => deleteMutation.mutate(Number(post.id))}>Delete</button>
                         </PostElement>)}
